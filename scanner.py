@@ -42,4 +42,3 @@ except socket.gaierror:
 except socket.error:
     print("Could not connect to server/ip.")
     sys.exit()
-
