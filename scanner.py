@@ -1,7 +1,5 @@
 #!/bin/python3
 
-# python3 scanner.py <ip>
-
 import sys
 import socket
 from datetime import datetime as time
