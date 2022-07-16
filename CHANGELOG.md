@@ -1,4 +1,13 @@
-## 0.1.1 (2022-07-15)
+# [0.2.0](https://github.com/thecyberworld/port-scanner/compare/v0.1.1...v0.2.0) (2022-07-16)
+
+
+### Features
+
+* verbose mode ([#12](https://github.com/thecyberworld/port-scanner/issues/12)) ([#13](https://github.com/thecyberworld/port-scanner/issues/13)) ([d0ba4a5](https://github.com/thecyberworld/port-scanner/commit/d0ba4a57850d37e5e2978445a09150fd2550643d))
+
+
+
+## [0.1.1](https://github.com/thecyberworld/port-scanner/compare/a0e670f5b4ecc229bfa08546e340d2177e8152f1...v0.1.1) (2022-07-15)
 
 
 ### Bug Fixes
