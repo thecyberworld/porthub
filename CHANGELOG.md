@@ -1,3 +1,12 @@
+# [0.3.0](https://github.com/thecyberworld/port-scanner/compare/v0.2.0...v0.3.0) (2022-07-16)
+
+
+### Features
+
+* default port range scans ([#16](https://github.com/thecyberworld/port-scanner/issues/16)) ([ef9dcd1](https://github.com/thecyberworld/port-scanner/commit/ef9dcd1f7ceb4ff43e92d7f171eed57060369814))
+
+
+
 # [0.2.0](https://github.com/thecyberworld/port-scanner/compare/v0.1.1...v0.2.0) (2022-07-16)
 
 
