@@ -1,13 +1,16 @@
 # port-scanner
 A fast port scanner written in python with a focus on reliability and simplicity. 
 
+### Prerequisites
+- [Python3](https://www.python.org/downloads/).
+
 #### 🛠️ Installation Steps
-1. Install python3.
-2. Install git.
-3. Clone this project.
+1. Clone this project.
+      
     `git clone https://github.com/thecyberworld/port-scanner.git`
-   or skip the step 2 and 3 by Download ZIP. 
-4. Navigate to the project directory.
+2. Navigate to the project.
+    
+   `cd port-scanner`
 
 #### Usage
 Port specific:
