@@ -30,26 +30,18 @@ elif len(sys.argv) == 4 or len(sys.argv) == 5:
 else:
     print("Invalid amount of arguments.")
     print("-" * 50)
-
     print("Syntax")
     print("> python3 scanner.py <ip>")
     print("> python3 scanner.py <ip> -v")
     print("> python3 scanner.py <ip> <port_start> <port_end>")
     print("> python3 scanner.py <ip> <port_start> <port_end> -v")
     print("-" * 50)
-
     print("Examples:")
     print("> python3 scanner.py 192.168.0.1")
     print("> python3 scanner.py 192.168.0.1 -v")
     print("> python3 scanner.py 192.168.0.1 150 1333")
     print("> python3 scanner.py 192.168.0.1 150 1333 -v")
     print("-" * 50)
-
-    sys.exit()
-
-    print("Invalid amount of arguments.")
-    print("Syntax: python3 scanner.py <ip> <start_port> <last_port>")
-    print("Example: python3 scanner.py 192.168.0.1 0 8888")
     sys.exit()
 
 # Check the date and time the scan was started.
