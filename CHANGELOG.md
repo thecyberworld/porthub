@@ -1,3 +1,12 @@
+# [0.4.0](https://github.com/thecyberworld/port-scanner/compare/v0.3.0...v0.4.0) (2022-07-17)
+
+
+### Features
+
+* output results ([#22](https://github.com/thecyberworld/port-scanner/issues/22)) ([166f209](https://github.com/thecyberworld/port-scanner/commit/166f209acfd393a9bf8bb3ff7bafe2e4b732678f))
+
+
+
 # [0.3.0](https://github.com/thecyberworld/port-scanner/compare/v0.2.0...v0.3.0) (2022-07-16)
 
 
