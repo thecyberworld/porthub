@@ -24,4 +24,3 @@ Verbose mode:
 
 - Example: `python3 scanner.py 192.168.1.1 0 200 -v`
 ![Verbose mode](https://user-images.githubusercontent.com/44284877/179357933-76ef587a-9f74-4ab7-b466-164ca4fce445.gif)
-
