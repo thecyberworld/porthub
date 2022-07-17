@@ -7,42 +7,49 @@ from datetime import datetime
 # Blank your screen
 # subprocess.call('clear', shell=True)
 
-# Define our target
-target = ' '
-port_start = ' '
-port_end = ' '
+target = ' '  # Define our target
+port_start = 0  # Default port range
+port_end = 100
 count = 0
 open_ports = []
+output_file_index = ' '
+store_open_ports = ' '
 
-# default settings
-if len(sys.argv) == 2 or len(sys.argv) == 3:
-    # Translate hostname to IPv4
-    target = socket.gethostbyname(sys.argv[1])
-    port_start = 0
-    port_end = 1000
-
-elif len(sys.argv) == 4 or len(sys.argv) == 5:
-    # Translate hostname to IPv4
-    target = socket.gethostbyname(sys.argv[1])
-    port_start = int(sys.argv[2])
-    port_end = int(sys.argv[3])
-
-else:
-    print("Invalid amount of arguments.")
+if len(sys.argv) == 1:
+    print()
+    print("]}> Invalid amount of arguments <{[")
     print("-" * 50)
-    print("Syntax")
+    print("Syntax: ")
     print("> python3 scanner.py <ip>")
     print("> python3 scanner.py <ip> -v")
+    print("> python3 scanner.py <ip> -o <output_file>")
     print("> python3 scanner.py <ip> <port_start> <port_end>")
-    print("> python3 scanner.py <ip> <port_start> <port_end> -v")
+    print("> python3 scanner.py <ip> <port_start> <port_end> -o <output_file> -v")
     print("-" * 50)
+
     print("Examples:")
-    print("> python3 scanner.py 192.168.0.1")
-    print("> python3 scanner.py 192.168.0.1 -v")
-    print("> python3 scanner.py 192.168.0.1 150 1333")
-    print("> python3 scanner.py 192.168.0.1 150 1333 -v")
+    print("> python3 scanner.py 192.168.1.1")
+    print("> python3 scanner.py 192.168.1.1 -v")
+    print("> python3 scanner.py 192.168.1.1 -o output.txt")
+    print("> python3 scanner.py 192.168.1.1 -o output.txt -v")
+    print("> python3 scanner.py 192.168.1.1 -p 50 150 -v")
+    print("> python3 scanner.py 192.168.1.1 -p 50 150 -o output.txt")
+    print("> python3 scanner.py 192.168.1.1 -p 50 150 -o output.txt -v")
     print("-" * 50)
     sys.exit()
+
+else:
+    # Translate hostname to IPv4
+    target = socket.gethostbyname(sys.argv[1])
+
+    for i in range(0, len(sys.argv)):
+        if "-p" == sys.argv[i]:
+            port_start = int(sys.argv[i + 1])
+            port_end = int(sys.argv[i + 2])
+
+        if "-o" == sys.argv[i]:
+            output_file_index = sys.argv[i + 1]
+            store_open_ports = open(f"{output_file_index}", "a")
 
 # Check the date and time the scan was started.
 time1 = datetime.now()
@@ -50,10 +57,7 @@ time1 = datetime.now()
 # Pretty banner
 print("-" * 35)
 print("Target: " + target)
-if len(sys.argv) == 2 or len(sys.argv) == 3:
-    print("Default range: {}-{}".format(port_start, port_end))
-else:
-    print("Ports Range: {}-{}".format(port_start, port_end))
+print(f"Ports Range: {port_start}-{port_end}")
 print("Time started: " + str(time1))
 print("-" * 35)
 
@@ -62,25 +66,30 @@ try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         socket.setdefaulttimeout(1)
         result = sock.connect_ex((target, port))
+
         if "-v" in sys.argv:
             if result == 0:
                 print("Port {}: open".format(port))
                 count = count + 1
                 open_ports.append(port)
-
             else:
                 print("Port {}: close".format(port))
+
         else:
             if result == 0:
                 print("Port {}: open".format(port))
                 count = count + 1
                 open_ports.append(port)
 
+        if "-o" in sys.argv:
+            if result == 0:
+                store_open_ports.write(f"{target}:" + str(port) + "\n")
+
         sock.close()
 
     print("-" * 35)
     print("Open ports: {}".format(open_ports))
-    print("Total open ports: {}".format(count))
+    print("Total ports open: {}".format(count))
 
 except KeyboardInterrupt:
     print("\nExiting scanner.")
@@ -94,9 +103,11 @@ except socket.error:
     print("Could not connect to server/ip.")
     sys.exit()
 
+if "-o" in sys.argv:
+    print(f"Output file: {output_file_index}")
+
 # Checking the time again
 time2 = datetime.now()
-
 total_time_taken = time2 - time1
 print("Scanning completed in {} ".format(total_time_taken))
 print("-" * 35)
