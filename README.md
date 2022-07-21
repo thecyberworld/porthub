@@ -36,4 +36,24 @@ A fast port scanner written in python with a focus on reliability and simplicity
 - Example: `python3 scanner.py 192.168.1.1 0 200 -v`
   ![Verbose mode](https://user-images.githubusercontent.com/44284877/179357933-76ef587a-9f74-4ab7-b466-164ca4fce445.gif)
 
+---
+
+> If you are new to Git and GitHub then must check out **[git-github-practice](https://github.com/cryptoverseWeb3/git-github-practice)** repository **first** and contribute to it before you contributing to other open-source projects.
+
+## 👨‍💻 Contributing
+
+- Contributions make the open source community such an amazing place to learn, inspire, and create.
+- Any contributions you make are **truly appreciated**.
+- Check out our [contribution guidelines](/CONTRIBUTING.md) for more information.
+
+## 🛡️ License
+
+port-scanner is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Support
+
+This project needs a ⭐️ from you. Don't forget to leave a star ⭐️
+
+---
+
 
