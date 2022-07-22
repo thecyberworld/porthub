@@ -1,3 +1,12 @@
+# [0.7.0](https://github.com/thecyberworld/port-scanner/compare/v0.6.0...v0.7.0) (2022-07-22)
+
+
+### Features
+
+* Dockerized ([#25](https://github.com/thecyberworld/port-scanner/issues/25)) ([2ff5530](https://github.com/thecyberworld/port-scanner/commit/2ff553075eb7289472b201df7371f1d158a1a9b0))
+
+
+
 # [0.6.0](https://github.com/thecyberworld/port-scanner/compare/v0.5.0...v0.6.0) (2022-07-22)
 
 
@@ -31,15 +40,6 @@
 ### Features
 
 * default port range scans ([#16](https://github.com/thecyberworld/port-scanner/issues/16)) ([ef9dcd1](https://github.com/thecyberworld/port-scanner/commit/ef9dcd1f7ceb4ff43e92d7f171eed57060369814))
-
-
-
-# [0.2.0](https://github.com/thecyberworld/port-scanner/compare/v0.1.1...v0.2.0) (2022-07-16)
-
-
-### Features
-
-* verbose mode ([#12](https://github.com/thecyberworld/port-scanner/issues/12)) ([#13](https://github.com/thecyberworld/port-scanner/issues/13)) ([d0ba4a5](https://github.com/thecyberworld/port-scanner/commit/d0ba4a57850d37e5e2978445a09150fd2550643d))
 
 
 
