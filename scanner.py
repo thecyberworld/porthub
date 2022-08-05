@@ -16,7 +16,7 @@ output_file_index = ' '
 store_open_ports = ' '
 
 if len(sys.argv) == 1:
-    print()
+    print(" ")
     print("]}> Invalid amount of arguments <{[")
     print("-" * 50)
     print("Syntax: ")
@@ -28,7 +28,10 @@ if len(sys.argv) == 1:
     print("-" * 50)
 
     print("Examples:")
+    print("> python3 scanner.py thecyberhub.org")
     print("> python3 scanner.py 192.168.1.1")
+    print("> python3 scanner.py 192.168.1.1 --host")
+    print("> python3 scanner.py 192.168.1.1 --ip")
     print("> python3 scanner.py 192.168.1.1 -v")
     print("> python3 scanner.py 192.168.1.1 -o output.txt")
     print("> python3 scanner.py 192.168.1.1 -o output.txt -v")
@@ -40,7 +43,8 @@ if len(sys.argv) == 1:
 
 else:
     # Translate hostname to IPv4
-    target = socket.gethostbyname(sys.argv[1])
+    target = sys.argv[1]
+    target_ip = socket.gethostbyname(sys.argv[1])
 
     for i in range(0, len(sys.argv)):
         if "-p" == sys.argv[i]:
@@ -57,6 +61,7 @@ time1 = datetime.now()
 # Pretty banner
 print("-" * 35)
 print("Target: " + target)
+print("Target Ipv4: " + target_ip)
 print(f"Ports Range: {port_start}-{port_end}")
 print("Time started: " + str(time1))
 print("-" * 35)
@@ -65,7 +70,7 @@ try:
     for port in range(port_start, port_end + 1):  # 1, 65535
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         socket.setdefaulttimeout(1)
-        result = sock.connect_ex((target, port))
+        result = sock.connect_ex((target_ip, port))
 
         if "-v" in sys.argv:
             if result == 0:
@@ -77,13 +82,19 @@ try:
 
         else:
             if result == 0:
-                print("Port {}: open".format(port))
+                if "--host" in sys.argv:
+                    print(f"{target}: {port}")
+                elif "--ip" in sys.argv:
+                    print(f"{target_ip}: {port}")
+                else:
+                    print(f"Port {port}: open")
+
                 count = count + 1
                 open_ports.append(port)
 
         if "-o" in sys.argv:
             if result == 0:
-                store_open_ports.write(f"{target}:" + str(port) + "\n")
+                store_open_ports.write(f"{target_ip}:" + str(port) + "\n")
 
         sock.close()
 
