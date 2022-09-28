@@ -4,8 +4,18 @@ import sys
 import socket
 from datetime import datetime
 
-# Blank your screen
-# subprocess.call('clear', shell=True)
+BLACK = '\u001b[30m'
+RED = '\u001b[31m'
+GREEN = '\u001b[32m'
+YELLOW = '\u001b[33m'
+BLUE = '\u001b[34m'
+MAGENTA = '\u001b[35m'
+CYAN = '\u001b[36m'
+WHITE = '\u001b[37m'
+RESET = '\u001b[0m'
+BOLD = '\u001b[1m'
+UNDERLINE = '\u001b[4m'
+REVERSE = '\u001b[7m'
 
 target = ' '  # Define our target
 port_start = 0  # Default port range
@@ -15,7 +25,30 @@ open_ports = []
 output_file_index = ' '
 store_open_ports = ' '
 
-if len(sys.argv) == 1:
+
+def colour_print(text: str, *effects: str) -> None:
+    """
+    Print `text` using the ANSI sequences to change colour, etc
+    :param text: The text to print.
+    :param effects: The effect we want.  Zero or more of the constants
+        defined at the start of this module.
+    """
+    effect_string = "".join(effects)
+    output_string = "{0}{1}{2}".format(effect_string, text, RESET)
+    print(output_string)
+
+
+def banner_start():
+    # Pretty banner
+    print(" " * 35)
+    print("[+] Target: " + target)
+    print("[+] Target Ipv4: " + target_ip)
+    print(f"[+] Ports Range: {port_start}-{port_end}")
+    print("[+] Time started: " + str(time1))
+    print(" " * 35)
+
+
+def examples():
     print(" ")
     print("]}> Invalid amount of arguments <{[")
     print("-" * 50)
@@ -39,6 +72,24 @@ if len(sys.argv) == 1:
     print("> python3 scanner.py 192.168.1.1 -p 50 150 -o output.txt")
     print("> python3 scanner.py 192.168.1.1 -p 50 150 -o output.txt -v")
     print("-" * 50)
+
+
+def banner_end():
+    if "-o" in sys.argv:
+        print(f"[+] Output file: {output_file_index}")
+
+    # Checking the time again
+    time2 = datetime.now()
+    total_time_taken = time2 - time1
+    print("[+] Scanning completed in {} ".format(total_time_taken))
+    print(" " * 35)
+
+
+# Blank your screen
+# subprocess.call('clear', shell=True)
+
+if len(sys.argv) == 1:
+    examples()
     sys.exit()
 
 else:
@@ -59,12 +110,7 @@ else:
 time1 = datetime.now()
 
 # Pretty banner
-print("-" * 35)
-print("Target: " + target)
-print("Target Ipv4: " + target_ip)
-print(f"Ports Range: {port_start}-{port_end}")
-print("Time started: " + str(time1))
-print("-" * 35)
+banner_start()
 
 try:
     for port in range(port_start, port_end + 1):  # 1, 65535
@@ -94,13 +140,18 @@ try:
 
         if "-o" in sys.argv:
             if result == 0:
-                store_open_ports.write(f"{target_ip}:" + str(port) + "\n")
+                if "--host" in sys.argv:
+                    store_open_ports.write(f"{target}:" + str(port) + "\n")
+                elif "--ip" in sys.argv:
+                    store_open_ports.write(f"{target_ip}:" + str(port) + "\n")
+                else:
+                    store_open_ports.write(f"{target_ip}:" + str(port) + "\n")
 
         sock.close()
 
-    print("-" * 35)
-    print("Open ports: {}".format(open_ports))
-    print("Total ports open: {}".format(count))
+    print(" " * 35)
+    print("[+] Open ports: {}".format(open_ports))
+    print("[+] Total ports open: {}".format(count))
 
 except KeyboardInterrupt:
     print("\nExiting scanner.")
@@ -114,11 +165,4 @@ except socket.error:
     print("Could not connect to server/ip.")
     sys.exit()
 
-if "-o" in sys.argv:
-    print(f"Output file: {output_file_index}")
-
-# Checking the time again
-time2 = datetime.now()
-total_time_taken = time2 - time1
-print("Scanning completed in {} ".format(total_time_taken))
-print("-" * 35)
+banner_end()
