@@ -2,7 +2,7 @@
 import subprocess
 import sys
 import socket
-from datetime import datetime
+from datetime import datetime as dt
 
 # Blank your screen
 # subprocess.call('clear', shell=True)
@@ -59,12 +59,12 @@ else:
 time1 = datetime.now()
 
 # Pretty banner
-print("-" * 35)
-print("Target: " + target)
+print("-" * 50)
+print("Scanning host -> " + target)
 print("Target Ipv4: " + target_ip)
 print(f"Ports Range: {port_start}-{port_end}")
 print("Time started: " + str(time1))
-print("-" * 35)
+print("-" * 50)
 
 try:
     for port in range(port_start, port_end + 1):  # 1, 65535
@@ -98,20 +98,20 @@ try:
 
         sock.close()
 
-    print("-" * 35)
+    print("-" * 50)
     print("Open ports: {}".format(open_ports))
     print("Total ports open: {}".format(count))
 
 except KeyboardInterrupt:
-    print("\nExiting scanner.")
+    print("\n<-Terminating scan->")
     sys.exit()
 
 except socket.gaierror:
-    print("Host name could not be resolved.")
+    print("!Host name could not be resolved!")
     sys.exit()
 
 except socket.error:
-    print("Could not connect to server/ip.")
+    print("!Could not connect to server/ip!")
     sys.exit()
 
 if "-o" in sys.argv:
