@@ -56,7 +56,7 @@ else:
             store_open_ports = open(f"{output_file_index}", "a")
 
 # Check the date and time the scan was started.
-time1 = datetime.now()
+time1 = dt.now()
 
 # Pretty banner
 print("-" * 50)
@@ -118,7 +118,7 @@ if "-o" in sys.argv:
     print(f"Output file: {output_file_index}")
 
 # Checking the time again
-time2 = datetime.now()
+time2 = dt.now()
 total_time_taken = time2 - time1
 print("Scanning completed in {} ".format(total_time_taken))
 print("-" * 35)
