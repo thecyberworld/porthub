@@ -1,124 +1,118 @@
 #!/bin/python3
-import subprocess
 import sys
 import socket
+import argparse
+import subprocess
+from termcolor import colored, cprint
 from datetime import datetime as dt
 
-# Blank your screen
+# clear your terminal
 # subprocess.call('clear', shell=True)
 
-target = ' '  # Define our target
-port_start = 0  # Default port range
-port_end = 100
-count = 0
+def exit() -> None:
+    sys.exit()
+
+def usage() -> None:
+    print(colored(f"""
+    => Usage <=
+    {"-"*50}
+    Syntax:
+    > python scanner_v2.py --host <HostIP>
+    > python scanner_v2.py --host <HostIP> -v
+    > python scanner_v2.py --host <HostIP> -o <outputFileName>
+    > python scanner_v2.py --host <HostIP> -p <portStart>-<portEnd>
+    > python scanner_v2.py --host <HostIP> -p <portStart>-<portEnd> -v -o <outputFileName>
+    {"-"*50}
+    """, 'green'))
+    exit()
+
+def get_arguments():
+    parser = argparse.ArgumentParser(description="Get arguments for port scanner")
+    parser.add_argument("--host", dest="HOST", help="IP address of host machine")
+    parser.add_argument('-o', '--output', dest='OUTPUT', help="Write the output into a file")
+    parser.add_argument('-p', '--port', dest='PORTS', help="ports to scan, input in the form <start>-<end>", default="FULL")
+    # parser.add_argument('-v', '--verbose', default='VERBOSE', help="increase output verbosity", action="store_true")
+    args = parser.parse_args()
+    if not args.HOST:
+        print(colored(f"HOST IP address is required.", 'red'))
+        usage()
+    return args
+
+target = ""
+port_start, port_end, count = 0, 100, 0 #default data
 open_ports = []
-output_file_index = ' '
-store_open_ports = ' '
+output_file = None
+store_open_ports = ''
 
-if len(sys.argv) == 1:
-    print(" ")
-    print("]}> Invalid amount of arguments <{[")
+def display_conf_data() -> None:
     print("-" * 50)
-    print("Syntax: ")
-    print("> python3 scanner.py <ip>")
-    print("> python3 scanner.py <ip> -v")
-    print("> python3 scanner.py <ip> -o <output_file>")
-    print("> python3 scanner.py <ip> <port_start> <port_end>")
-    print("> python3 scanner.py <ip> <port_start> <port_end> -o <output_file> -v")
+    print("Scanning host(IPv4) -> " + target)
+    # print("Target Ipv4: " + target)
+    print(f"Ports Range: {port_start}-{port_end}")
+    print(f"Output file: {output_file}")
     print("-" * 50)
 
-    print("Examples:")
-    print("> python3 scanner.py thecyberhub.org")
-    print("> python3 scanner.py 192.168.1.1")
-    print("> python3 scanner.py 192.168.1.1 --host")
-    print("> python3 scanner.py 192.168.1.1 --ip")
-    print("> python3 scanner.py 192.168.1.1 -v")
-    print("> python3 scanner.py 192.168.1.1 -o output.txt")
-    print("> python3 scanner.py 192.168.1.1 -o output.txt -v")
-    print("> python3 scanner.py 192.168.1.1 -p 50 150 -v")
-    print("> python3 scanner.py 192.168.1.1 -p 50 150 -o output.txt")
-    print("> python3 scanner.py 192.168.1.1 -p 50 150 -o output.txt -v")
-    print("-" * 50)
-    sys.exit()
-
-else:
-    # Translate hostname to IPv4
-    target = sys.argv[1]
-    target_ip = socket.gethostbyname(sys.argv[1])
-
-    for i in range(0, len(sys.argv)):
-        if "-p" == sys.argv[i]:
-            port_start = int(sys.argv[i + 1])
-            port_end = int(sys.argv[i + 2])
-
-        if "-o" == sys.argv[i]:
-            output_file_index = sys.argv[i + 1]
-            store_open_ports = open(f"{output_file_index}", "a")
-
-# Check the date and time the scan was started.
-time1 = dt.now()
-
-# Pretty banner
-print("-" * 50)
-print("Scanning host -> " + target)
-print("Target Ipv4: " + target_ip)
-print(f"Ports Range: {port_start}-{port_end}")
-print("Time started: " + str(time1))
-print("-" * 50)
-
-try:
-    for port in range(port_start, port_end + 1):  # 1, 65535
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        socket.setdefaulttimeout(1)
-        result = sock.connect_ex((target_ip, port))
-
-        if "-v" in sys.argv:
+def find_open_ports():
+    try:
+        for port in range(port_start, port_end+1):
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            socket.setdefaulttimeout(1)
+            result = sock.connect_ex((target, port))
             if result == 0:
-                print("Port {}: open".format(port))
-                count = count + 1
+                if output_file:
+                    store_open_ports.write(f"{target}:{port} => OPEN\n")
+                print(f"{target}:{port} => OPEN")
                 open_ports.append(port)
+                global count
+                count = count + 1
             else:
-                print("Port {}: close".format(port))
+                print(f"{target}:{port} => CLOSED")
+            
+            sock.close()
+        
+        print(f'''
+            {"-"*50}
+            Total Open Ports: {count}
+            Open Ports: {open_ports}
+        ''')
 
-        else:
-            if result == 0:
-                if "--host" in sys.argv:
-                    print(f"{target}: {port}")
-                elif "--ip" in sys.argv:
-                    print(f"{target_ip}: {port}")
-                else:
-                    print(f"Port {port}: open")
+    except KeyboardInterrupt:
+        print(colored("\n <- Keyboard Interruption - Terminating scan ->", "red"))
+        exit()
+    except socket.gaierror:
+        print(colored(" !Host name could not be resolved! ", "red"))
+        exit()
+    except socket.error:
+        print(colored(f" !Could not connect to host/ip {target} ", "red"))
+        exit()
 
-                count = count + 1
-                open_ports.append(port)
+if __name__ == '__main__':
+    start_time = dt.now()
+    print("Time started: " + str(start_time))
+    args = get_arguments()
+    target = args.HOST
+    ports = args.PORTS
+    if "-" in ports:
+        port_start, port_end = ports.split("-")
+        port_start = int(port_start)
+        port_end = int(port_end)
+    elif ports == "FULL": #complete port scan
+        port_start, port_end = 1, 65535
+    else:
+        port_start = int(ports) or port_start
+    # check the start and end port values, if they are in same order or not
+    if port_start > port_end:
+        port_start, port_end = port_end, port_start
+    
+    if args.OUTPUT:
+        output_file = args.OUTPUT
+        store_open_ports = open(f"{output_file}", "a")
 
-        if "-o" in sys.argv:
-            if result == 0:
-                store_open_ports.write(f"{target_ip}:" + str(port) + "\n")
+    display_conf_data()
+    find_open_ports()
 
-        sock.close()
-
-    print("-" * 50)
-    print("Open ports: {}".format(open_ports))
-    print("Total ports open: {}".format(count))
-
-except KeyboardInterrupt:
-    print("\n<-Terminating scan->")
-    sys.exit()
-
-except socket.gaierror:
-    print("!Host name could not be resolved!")
-    sys.exit()
-
-except socket.error:
-    print("!Could not connect to server/ip!")
-    sys.exit()
-
-if "-o" in sys.argv:
-    print(f"Output file: {output_file_index}")
-
-# Checking the time again
-time2 = dt.now()
-total_time_taken = time2 - time1
-print("Scanning completed in {} ".format(total_time_taken))
-print("-" * 35)
+    end_time = dt.now()
+    total_time = end_time - start_time
+    print(f"Scanning completed in {total_time}")
+    print("="*35)
+    exit()
