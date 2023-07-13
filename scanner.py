@@ -71,9 +71,9 @@ def find_open_ports():
             sock.close()
         
         print(f'''
-            {"-"*50}
-            Total Open Ports: {count}
-            Open Ports: {open_ports}
+{"-"*50}
+Total Open Ports: {count}
+Open Ports: {open_ports}
         ''')
 
     except KeyboardInterrupt:
