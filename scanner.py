@@ -21,6 +21,7 @@ def usage() -> None:
     > python scanner_v2.py --host <HostIP> -v
     > python scanner_v2.py --host <HostIP> -o <outputFileName>
     > python scanner_v2.py --host <HostIP> -p <portStart>-<portEnd>
+    > python scanner_v2.py --host <HostIP> --top1000
     > python scanner_v2.py --host <HostIP> -p <portStart>-<portEnd> -v -o <outputFileName>
     {"-"*50}
     """, 'green'))
@@ -31,6 +32,7 @@ def get_arguments():
     parser.add_argument("--host", dest="HOST", help="IP address of host machine")
     parser.add_argument('-o', '--output', dest='OUTPUT', help="Write the output into a file")
     parser.add_argument('-p', '--port', dest='PORTS', help="ports to scan, input in the form <start>-<end>", default="FULL")
+    parser.add_argument('--top1000', help="Perform a top 1000 port scan (1-1000)", action="store_true")
     # parser.add_argument('-v', '--verbose', default='VERBOSE', help="increase output verbosity", action="store_true")
     args = parser.parse_args()
     if not args.HOST:
@@ -103,6 +105,9 @@ if __name__ == '__main__':
     # check the start and end port values, if they are in same order or not
     if port_start > port_end:
         port_start, port_end = port_end, port_start
+
+    if args.top1000: #Perform 1-1000 port scan
+        port_start, port_end = 1, 1000
     
     if args.OUTPUT:
         output_file = args.OUTPUT
